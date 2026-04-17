@@ -1,11 +1,11 @@
 // ============================================================
 //  src/routes/authRoutes.js
 // ============================================================
-const express  = require('express')
-const bcrypt   = require('bcryptjs')
-const jwt      = require('jsonwebtoken')
-const { OAuth2Client } = require('google-auth-library')
-const User     = require('../models/User')
+import express  from 'express'
+import bcrypt   from 'bcryptjs'
+import jwt      from 'jsonwebtoken'
+import { OAuth2Client } from'google-auth-library'
+import User  from'../models/User.js'
 const router   = express.Router()
 
 const client   = new OAuth2Client(process.env.GOOGLE_CLIENT_ID)

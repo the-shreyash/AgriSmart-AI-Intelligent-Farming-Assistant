@@ -1,11 +1,11 @@
 // ============================================================
 //  src/services/weatherService.js — Fixed with better error logging
 // ============================================================
-const axios = require('axios');
+import axios from 'axios'
 
 const OWM_BASE = 'https://api.openweathermap.org/data/2.5/weather';
 
-async function fetchWeather(location) {
+export async function fetchWeather(location) {
   const apiKey = process.env.OPENWEATHER_API_KEY || process.env.WEATHER_API_KEY;
 
   if (!apiKey || apiKey === 'your_openweathermap_api_key_here') {
@@ -87,4 +87,4 @@ function _weatherIcon(main) {
   return map[main] || '🌡️';
 }
 
-module.exports = { fetchWeather };
+

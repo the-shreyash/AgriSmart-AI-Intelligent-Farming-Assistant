@@ -3,15 +3,15 @@
 //  Handles POST /api/recommend
 //  Orchestrates: validate → weather → Gemini → mandi → respond
 // ============================================================
-const { fetchWeather }             = require('../services/weatherService');
-const { generateRecommendations }  = require('../services/geminiService');
-const { enrichWithMandiPrices }    = require('../services/mandiService');
-const { validateRecommendRequest } = require('../utils/validators');
+import { fetchWeather } from'../services/weatherService.js';
+import { generateRecommendations }  from '../services/geminiService.js';
+import { enrichWithMandiPrices }    from '../services/mandiService.js';
+import { validateRecommendRequest } from '../utils/validators.js';
 
 /**
  * POST /api/recommend
  */
-async function recommend(req, res, next) {
+export async function recommend(req, res, next) {
   try {
     // 1. Validate input ─────────────────────────────────────
     const { error, value } = validateRecommendRequest(req.body);
@@ -53,4 +53,4 @@ async function recommend(req, res, next) {
   }
 }
 
-module.exports = { recommend };
+

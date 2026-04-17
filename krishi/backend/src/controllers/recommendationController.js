@@ -2,15 +2,15 @@
 //  src/controllers/recommendationController.js
 //  Orchestrates: validate → weather → AI → mandi → save → respond
 // ============================================================
-const { fetchWeather }            = require('../services/weatherService');
-const { generateRecommendations } = require('../services/geminiService');
-const { enrichWithMandiPrices }   = require('../services/mandiService');
-const { validateRecommendRequest } = require('../utils/validators');
-const FarmInput      = require('../models/FarmInput');
-const Recommendation = require('../models/Recommendation');
+import { fetchWeather } from '../services/weatherService.js';
+import  {generateRecommendations} from '../services/geminiService.js';
+import  {enrichWithMandiPrices}   from'../services/mandiService.js';
+import { validateRecommendRequest } from '../utils/validators.js';
+import FarmInput from '../models/FarmInput.js';
+import Recommendation from '../models/Recommendation.js';
 
 // ── POST /api/recommendation/generate ────────────────────────
-async function generate(req, res, next) {
+export async function generate(req, res, next) {
   try {
     // 1. Validate input ───────────────────────────────────────
     const { error, value } = validateRecommendRequest(req.body);
@@ -135,7 +135,7 @@ async function generate(req, res, next) {
 
 // ── GET /api/recommendation/latest ───────────────────────────
 // Returns the most recent saved recommendation for the user
-async function getLatest(req, res, next) {
+export  async function getLatest(req, res, next) {
   try {
     const rec = await Recommendation
       .findOne({ user: req.user.id })
@@ -157,7 +157,7 @@ async function getLatest(req, res, next) {
 
 // ── GET /api/recommendation/history ──────────────────────────
 // Returns all past recommendations for the user (paginated)
-async function getHistory(req, res, next) {
+export async function getHistory(req, res, next) {
   try {
     const page  = Math.max(parseInt(req.query.page)  || 1, 1);
     const limit = Math.min(parseInt(req.query.limit) || 10, 50);
@@ -187,7 +187,7 @@ async function getHistory(req, res, next) {
 
 // ── GET /api/recommendation/:id ───────────────────────────────
 // Returns a single recommendation by ID (scoped to user)
-async function getById(req, res, next) {
+export async function getById(req, res, next) {
   try {
     const rec = await Recommendation
       .findOne({ _id: req.params.id, user: req.user.id })
@@ -206,4 +206,3 @@ async function getById(req, res, next) {
   }
 }
 
-module.exports = { generate, getLatest, getHistory, getById };

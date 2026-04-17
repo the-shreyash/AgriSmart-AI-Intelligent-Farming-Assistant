@@ -17,7 +17,7 @@ const VALID_LANGS   = ['hi', 'en'];
  * Validates the body of POST /api/recommend
  * @returns {{ error: null|{details:[{message:string}]}, value: object }}
  */
-function validateRecommendRequest(body = {}) {
+export function validateRecommendRequest(body = {}) {
   const errors = [];
 
   const location          = (body.location          || '').trim();
@@ -50,4 +50,4 @@ function validateRecommendRequest(body = {}) {
   return { error: null, value: { location, soilType, season, waterAvailability, language, farmSize } };
 }
 
-module.exports = { validateRecommendRequest };
+

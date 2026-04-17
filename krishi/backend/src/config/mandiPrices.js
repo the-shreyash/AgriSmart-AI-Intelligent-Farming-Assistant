@@ -5,7 +5,7 @@
 //          Agmarknet live scraping can replace this later.
 // ============================================================
 
-const MANDI_PRICES = {
+export const MANDI_PRICES = {
   wheat:      { min: 2100, max: 2400, unit: '₹/quintal', trend: 'stable',   msp: 2275 },
   rice:       { min: 1940, max: 2200, unit: '₹/quintal', trend: 'rising',   msp: 2183 },
   maize:      { min: 1700, max: 1950, unit: '₹/quintal', trend: 'stable',   msp: 2090 },
@@ -30,7 +30,7 @@ const MANDI_PRICES = {
  * Fuzzy-match a crop name to our price map.
  * Returns price entry or a default fallback.
  */
-function getPriceForCrop(cropName) {
+export  function getPriceForCrop(cropName) {
   if (!cropName) return _default();
   const key = cropName.toLowerCase().trim()
     .replace(/\s+/g, '')
@@ -48,4 +48,4 @@ function _default() {
   return { min: 2000, max: 3500, unit: '₹/quintal', trend: 'stable', msp: null };
 }
 
-module.exports = { MANDI_PRICES, getPriceForCrop };
+

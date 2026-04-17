@@ -1,15 +1,15 @@
 // ============================================================
 //  src/routes/farmRoutes.js
 // ============================================================
-const express           = require('express');
-const { authMiddleware } = require('../middleware/authMiddleware');
-const {
+import express from 'express';
+import  authMiddleware from '../middleware/authMiddleware.js';
+import {
   createFarm,
   getMyLands,
   getFarmById,
   updateFarm,
   deleteFarm,
-} = require('../controllers/farmController');
+} from '../controllers/farmController.js';
 
 const router = express.Router();
 
@@ -28,4 +28,4 @@ router.get('/:id',        getFarmById);
 router.put('/:id',        updateFarm);
 router.delete('/:id',     deleteFarm);
 
-export default farmRoutes;
+export default router;

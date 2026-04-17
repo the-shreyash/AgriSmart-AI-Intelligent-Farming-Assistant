@@ -1,12 +1,12 @@
 // ============================================================
 //  src/routes/healthRoutes.js
 // ============================================================
-const express       = require('express');
-const { health }    = require('../controllers/healthController');
+import express   from'express';
+import { health }from'../controllers/healthController.js';
 
 const router = express.Router();
 
 // GET /api/health
 router.get('/health', health);
 
-export default healthRoutes
+export default router;

@@ -1,5 +1,5 @@
 
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const recommendationSchema = new mongoose.Schema(
   {
@@ -112,6 +112,4 @@ const recommendationSchema = new mongoose.Schema(
 recommendationSchema.index({ user: 1, createdAt: -1 });
 recommendationSchema.index({ farmInput: 1, createdAt: -1 });
 
-module.exports =
-  mongoose.models.Recommendation ||
-  mongoose.model('Recommendation', recommendationSchema);
+export default mongoose.models.Recommendation || mongoose.model('Recommendation', recommendationSchema);

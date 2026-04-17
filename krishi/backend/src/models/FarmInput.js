@@ -1,5 +1,5 @@
 
-const mongoose = require('mongoose');
+import mongoose from'mongoose';
 
 const farmInputSchema = new mongoose.Schema(
   {
@@ -64,5 +64,4 @@ const farmInputSchema = new mongoose.Schema(
 
 // Compound index: quickly fetch all active farms for a user
 farmInputSchema.index({ user: 1, isActive: 1 });
-
-module.exports = mongoose.models.FarmInput || mongoose.model('FarmInput', farmInputSchema);
+export default   mongoose.models.FarmInput || mongoose.model('FarmInput', farmInputSchema);

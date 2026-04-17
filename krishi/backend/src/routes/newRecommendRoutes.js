@@ -1,12 +1,12 @@
 
-const express            = require('express');
-const { authMiddleware } = require('../middleware/authMiddleware');
-const {
+import express from 'express';
+import  authMiddleware  from '../middleware/authMiddleware.js';
+import {
   generate,
   getLatest,
   getHistory,
   getById,
-} = require('../controllers/recommendationController');
+} from '../controllers/recommendationController.js';
 
 const router = express.Router();
 
@@ -22,7 +22,7 @@ const router = express.Router();
 // We'll require auth for these specific history routes, and use optional auth for generate.
 
 // Let's define an optional auth middleware right here for generate
-const jwt = require('jsonwebtoken');
+import jwt from 'jsonwebtoken';
 const JWT_SECRET = process.env.JWT_SECRET || 'kisan-ai-secret-key';
 
 function optionalAuth(req, res, next) {
@@ -48,4 +48,4 @@ router.get('/latest',  getLatest);
 router.get('/history', getHistory);
 router.get('/:id',     getById);
 
-export default newRecommendRoutes
+export default router

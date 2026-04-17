@@ -3,9 +3,9 @@
 //  GET /api/tts?text=नमस्ते&lang=hi
 //  Uses axios to fetch Google TTS audio and pipe to client
 // ============================================================
-const express = require('express')
-const axios   = require('axios')
-const router  = express.Router()
+ import express from 'express'
+ import axios   from 'axios'
+ const router  = express.Router()
 
 router.get('/tts', async (req, res) => {
   const text = (req.query.text || '').trim().slice(0, 200)
@@ -52,4 +52,4 @@ router.get('/tts', async (req, res) => {
   }
 })
 
-module.exports = router
+export default router

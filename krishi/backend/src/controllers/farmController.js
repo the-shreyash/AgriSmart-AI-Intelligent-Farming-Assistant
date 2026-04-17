@@ -2,12 +2,12 @@
 //  src/controllers/farmController.js
 //  Handles all "Land Information" CRUD for logged-in farmers
 // ============================================================
-const FarmInput = require('../models/FarmInput');
-const User      = require('../models/User');
+import FarmInput from '../models/FarmInput.js';
+import  User from '../models/User.js';
 
 // ── POST /api/farm  ─────────────────────────────────────────
 // Save a new land parcel and push its ID into user.farms[]
-async function createFarm(req, res, next) {
+export async function createFarm(req, res, next) {
   try {
     const { landName, location, soilType, season, waterAvailability, farmSize } = req.body;
 
@@ -47,7 +47,7 @@ async function createFarm(req, res, next) {
 
 // ── GET /api/farm/my-lands  ─────────────────────────────────
 // Return all active lands belonging to the logged-in user
-async function getMyLands(req, res, next) {
+export async function getMyLands(req, res, next) {
   try {
     const farms = await FarmInput
       .find({ user: req.user.id, isActive: true })
@@ -65,7 +65,7 @@ async function getMyLands(req, res, next) {
 
 // ── GET /api/farm/:id  ─────────────────────────────────────
 // Return a single land parcel (must belong to the logged-in user)
-async function getFarmById(req, res, next) {
+export async function getFarmById(req, res, next) {
   try {
     const farm = await FarmInput.findOne({
       _id:    req.params.id,
@@ -88,7 +88,7 @@ async function getFarmById(req, res, next) {
 
 // ── PUT /api/farm/:id  ─────────────────────────────────────
 // Update an existing land parcel
-async function updateFarm(req, res, next) {
+export async function updateFarm(req, res, next) {
   try {
     const allowed = ['landName', 'location', 'soilType', 'season', 'waterAvailability', 'farmSize'];
     const updates = {};
@@ -121,7 +121,7 @@ async function updateFarm(req, res, next) {
 
 // ── DELETE /api/farm/:id  ──────────────────────────────────
 // Soft-delete: set isActive = false
-async function deleteFarm(req, res, next) {
+export async function deleteFarm(req, res, next) {
   try {
     const farm = await FarmInput.findOneAndUpdate(
       { _id: req.params.id, user: req.user.id },
@@ -150,4 +150,3 @@ async function deleteFarm(req, res, next) {
   }
 }
 
-module.exports = { createFarm, getMyLands, getFarmById, updateFarm, deleteFarm };

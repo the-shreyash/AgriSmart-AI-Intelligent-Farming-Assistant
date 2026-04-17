@@ -1,12 +1,12 @@
 // ============================================================
 //  src/routes/recommendRoutes.js
 
-import newRecommendRoutes from './newRecommendRoutes';
+import newRecommendRoutes from "./newRecommendRoutes.js";
 
 // ============================================================
-const express = require('express');
-const { recommend } = require('../controllers/recommendController');
-const { fetchWeather } = require('../services/weatherService');
+import express from 'express'
+import { recommend } from '../controllers/recommendController.js';
+import { fetchWeather } from '../services/weatherService.js';
 
 const router = express.Router();
 

@@ -1,5 +1,5 @@
 
-const { GoogleGenerativeAI } = require('@google/generative-ai');
+import { GoogleGenerativeAI } from '@google/generative-ai';
 
 let genAI = null;
 
@@ -13,8 +13,8 @@ function getGeminiClient() {
   return genAI;
 }
 
-function getModel() {
+export function getModel() {
   return getGeminiClient().getGenerativeModel({ model: "gemini-1.5-flash-latest" });
 }
 
-module.exports = { getModel };
+

@@ -1,10 +1,10 @@
 // ============================================================
 //  src/services/geminiService.js — LOCATION-SPECIFIC CROPS
 // ============================================================
-const { getModel }        = require('../config/gemini');
-const { getFallbackData } = require('../utils/fallbackData');
+import { getModel }  from  '../config/gemini.js';
+import { getFallbackData } from '../utils/fallbackData.js';
 
-async function generateRecommendations(params) {
+export async function generateRecommendations(params) {
   const { location, soilType, season, waterAvailability, farmSize, language, weather } = params;
   const isHindi = language === 'hi';
 
@@ -122,4 +122,3 @@ function _parseJson(raw, soilType, season, isHindi, location) {
   }
 }
 
-module.exports = { generateRecommendations };

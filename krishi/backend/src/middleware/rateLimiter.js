@@ -2,7 +2,7 @@
 //  src/middleware/rateLimiter.js
 //  Prevents API abuse — 50 requests per 15 minutes per IP
 // ============================================================
-const rateLimit = require('express-rate-limit');
+import rateLimit from 'express-rate-limit';
 
 export const rateLimiter = rateLimit({
   windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS) || 15 * 60 * 1000,

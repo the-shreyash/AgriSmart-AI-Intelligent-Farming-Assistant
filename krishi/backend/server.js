@@ -1,4 +1,5 @@
-import dotenv from 'dotenv';
+import dotenv from "dotenv";
+dotenv.config();
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
@@ -21,8 +22,8 @@ const app = express();
 
 
 
-const PORT = process.env.PORT || 5000;
-
+const PORT = process.env.PORT || 5001;
+const MONGO_URI = process.env.MONGO_URI;
 // ── Security ────────────────────────────────────────────────
 app.use(helmet({ contentSecurityPolicy: false }));
 
@@ -86,5 +87,4 @@ app.listen(PORT, () => {
   console.log(`║   ☁️   Weather:  ${process.env.OPENWEATHER_API_KEY ? '✅ configured' : '❌ MISSING'}`);
   console.log('╚═══════════════════════════════════════════════╝\n');
 });
-
-module.exports = app;
+export default app;

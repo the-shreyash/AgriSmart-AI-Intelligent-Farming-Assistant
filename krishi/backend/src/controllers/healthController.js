@@ -3,7 +3,7 @@
 //  GET /api/health  — quick server status check
 // ============================================================
 
-function health(_req, res) {
+export function health(_req, res) {
   res.json({
     status:           'ok',
     timestamp:        new Date().toISOString(),
@@ -14,4 +14,4 @@ function health(_req, res) {
   });
 }
 
-module.exports = { health };
+

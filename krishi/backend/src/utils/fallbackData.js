@@ -299,7 +299,7 @@ function getCropsForLocation(location) {
 }
 
 // ── Main export ───────────────────────────────────────────────
-function getFallbackData(soilType, season, isHindi, location = '') {
+export function getFallbackData(soilType, season, isHindi, location = '') {
   const cropKeys = getCropsForLocation(location)
   const hi = isHindi
 
@@ -394,4 +394,4 @@ function _getRevenue(cropKey, hi) {
   return map[cropKey] || (hi ? '₹35,000 – ₹60,000 प्रति एकड़' : '₹35,000 – ₹60,000 per acre')
 }
 
-module.exports = { getFallbackData }
+
