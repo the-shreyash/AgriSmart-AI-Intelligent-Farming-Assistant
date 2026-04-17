@@ -1,24 +1,26 @@
-import 'dotenv/config';
-// ============================================================
-//  backend/server.js  —  Express entry point
-// ============================================================
-require('dotenv').config();
+import dotenv from 'dotenv';
+import express from 'express';
+import cors from 'cors';
+import helmet from 'helmet';
+import mongoose from 'mongoose';
 
-const express  = require('express');
-const cors     = require('cors');
-const helmet   = require('helmet');
-const mongoose = require('mongoose');              
+import { rateLimiter } from './src/middleware/rateLimiter.js';
+import { requestLogger } from './src/middleware/requestLogger.js';
+import  errorHandler  from './src/middleware/errorHandler.js';
 
-const { rateLimiter }   = require('./src/middleware/rateLimiter');
-const { requestLogger } = require('./src/middleware/requestLogger');
-const { errorHandler }  = require('./src/middleware/errorHandler');
+import recommendRoutes from './src/routes/recommendRoutes.js';
+import newRecommendRoutes from './src/routes/newRecommendRoutes.js';
+import farmRoutes from './src/routes/farmRoutes.js';
+import healthRoutes from './src/routes/healthRoutes.js';
+import ttsRoutes from './src/routes/ttsRoutes.js';
+import authRoutes from './src/routes/authRoutes.js';
 
-const recommendRoutes = require('./src/routes/recommendRoutes');
-const healthRoutes    = require('./src/routes/healthRoutes');
-const ttsRoutes       = require('./src/routes/ttsRoutes');
-const authRoutes      = require('./src/routes/authRoutes'); // ✅ NEW
+const app = express();
 
-const app  = express();
+
+
+
+
 const PORT = process.env.PORT || 5000;
 
 // ── Security ────────────────────────────────────────────────
@@ -55,7 +57,9 @@ app.use(requestLogger);
 app.use('/api/', rateLimiter);
 
 // ── API Routes ──────────────────────────────────────────────
-app.use('/api', recommendRoutes);
+app.use('/api', recommendRoutes); // Keep old one for backward compatibility if needed, or remove later
+app.use('/api/recommendation', newRecommendRoutes); // New recommendation endpoints
+app.use('/api/farm', farmRoutes);     // Farm endpoints
 app.use('/api', healthRoutes);
 app.use('/api', ttsRoutes);
 app.use('/api/auth', authRoutes); // ✅ NEW (Auth routes)
@@ -76,6 +80,8 @@ app.listen(PORT, () => {
   console.log(`║   🔐  Auth:     http://localhost:${PORT}/api/auth ║`); // ✅ NEW
   console.log(`║   🔊  TTS:      http://localhost:${PORT}/api/tts  ║`);
   console.log(`║   📋  Health:   http://localhost:${PORT}/api/health║`);
+  console.log(`║   🌾  Farm:     http://localhost:${PORT}/api/farm ║`);
+  console.log(`║   🤖  Rec:      http://localhost:${PORT}/api/recommendation/generate ║`);
   console.log(`║   🤖  Gemini:   ${process.env.GEMINI_API_KEY  && process.env.GEMINI_API_KEY  !== 'your_gemini_api_key_here'  ? '✅ configured' : '❌ MISSING'}`);
   console.log(`║   ☁️   Weather:  ${process.env.OPENWEATHER_API_KEY ? '✅ configured' : '❌ MISSING'}`);
   console.log('╚═══════════════════════════════════════════════╝\n');

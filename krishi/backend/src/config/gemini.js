@@ -1,6 +1,4 @@
-// ============================================================
-//  src/config/gemini.js
-// ============================================================
+
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 
 let genAI = null;

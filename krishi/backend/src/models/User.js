@@ -1,16 +1,48 @@
-// ============================================================
-//  src/models/User.js
-// ============================================================
-const mongoose = require('mongoose')
-
-const userSchema = new mongoose.Schema({
-  name:         { type: String, required: true },
-  email:        { type: String, required: true, unique: true, lowercase: true },
-  password:     { type: String },           // null for Google users
-  googleId:     { type: String },           // null for email users
-  avatar:       { type: String },
-  provider:     { type: String, enum: ['email', 'google'], default: 'email' },
-  createdAt:    { type: Date, default: Date.now },
-})
+const mongoose = require('mongoose');
+const userSchema = new mongoose.Schema(
+  {
+    name: {
+      type:     String,
+      required: true,
+      trim:     true,
+    },
+    email: {
+      type:      String,
+      required:  true,
+      unique:    true,
+      lowercase: true,
+      trim:      true,
+    },
+    password: {
+      type:      String,
+      minlength: 6,
+      // Not required — Google OAuth users won't have one
+    },
+    googleId: {
+      type: String,
+    },
+    avatar: {
+      type: String,
+    },
+    provider: {
+      type:    String,
+      enum:    ['email', 'google'],
+      default: 'email',
+    },
+    role: {
+      type:    String,
+      enum:    ['farmer', 'admin'],
+      default: 'farmer',
+    },
+    // References to all farm lands this user owns
+    farms: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref:  'FarmInput',
+      },
+    ],
+  },
+  { timestamps: true }
+);
 
 module.exports = mongoose.models.User || mongoose.model('User', userSchema);

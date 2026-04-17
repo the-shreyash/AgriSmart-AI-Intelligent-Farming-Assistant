@@ -9,4 +9,4 @@ const router = express.Router();
 // GET /api/health
 router.get('/health', health);
 
-module.exports = router;
+export default healthRoutes
