@@ -65,12 +65,13 @@ function Navbar() {
 
   const lnk = (active) => ({
     display:'inline-flex', alignItems:'center', gap:'6px',
-    padding:'8px 16px', borderRadius:'50px',
-    fontFamily:"'DM Sans',sans-serif", fontSize:'13.5px', fontWeight:500,
-    color:      active ? '#f0a824' : 'rgba(255,255,255,.75)',
-    background: active ? 'rgba(240,168,36,.12)' : 'transparent',
-    border:     active ? '1px solid rgba(240,168,36,.25)' : '1px solid transparent',
-    transition:'all .2s', textDecoration:'none',
+    padding:'10px 24px', borderRadius:'8px',
+    fontFamily:"'Syne',sans-serif", fontSize:'13px', fontWeight:600,
+    color:      active ? 'var(--gold-light)' : 'rgba(255,255,255,.5)',
+    background: active ? 'rgba(255,255,255,.05)' : 'transparent',
+    border:     active ? '1px solid rgba(255,255,255,.1)' : '1px solid transparent',
+    transition:'all .3s', textDecoration:'none',
+    letterSpacing:'0.5px'
   })
 
   return (
@@ -104,29 +105,33 @@ function Navbar() {
           🤖 AI से सलाह लें
         </Link>
 
-        {/* User info / Login button */}
         {user ? (
-          <div style={{ display:'flex', alignItems:'center', gap:'10px', marginLeft:'12px' }}>
-            <span style={{ fontFamily:"'DM Sans',sans-serif", fontSize:'13px', color:'rgba(255,255,255,.8)' }}>
-              👤 {user.name?.split(' ')[0]}
+          <div style={{ display:'flex', alignItems:'center', gap:'16px', marginLeft:'20px' }}>
+            <span style={{ fontFamily:"'Syne',sans-serif", fontSize:'12px', fontWeight:700, color:'rgba(255,255,255,.5)', textTransform:'uppercase' }}>
+              {user.name?.split(' ')[0]}
             </span>
             <button onClick={handleLogout} style={{
-              padding:'8px 16px', borderRadius:'50px',
-              background:'rgba(220,38,38,.2)', border:'1px solid rgba(220,38,38,.4)',
-              color:'#fca5a5', fontFamily:"'DM Sans',sans-serif",
-              fontSize:'12px', fontWeight:600, cursor:'pointer',
-            }}>
-              Logout
+              padding:'10px 20px', borderRadius:'8px',
+              background:'transparent', border:'1px solid rgba(220,38,38,.3)',
+              color:'#fca5a5', fontFamily:"'Syne',sans-serif",
+              fontSize:'12px', fontWeight:700, cursor:'pointer',
+              transition:'all .2s'
+            }}
+              onMouseEnter={e => e.currentTarget.style.background='rgba(220,38,38,.1)'}
+              onMouseLeave={e => e.currentTarget.style.background='transparent'}
+            >
+              LOGOUT
             </button>
           </div>
         ) : (
           <Link to="/login" style={{
-            marginLeft:'12px', padding:'8px 20px', borderRadius:'50px',
-            background:'rgba(255,255,255,.12)', border:'1px solid rgba(255,255,255,.25)',
-            color:'#fff', fontFamily:"'DM Sans',sans-serif",
-            fontSize:'13px', fontWeight:600, textDecoration:'none',
+            marginLeft:'20px', padding:'10px 24px', borderRadius:'8px',
+            background:'var(--gold-light)', border:'none',
+            color:'var(--green-deep)', fontFamily:"'Syne',sans-serif",
+            fontSize:'13px', fontWeight:700, textDecoration:'none',
+            boxShadow:'0 4px 12px rgba(240,168,36,.2)'
           }}>
-            🔐 Login
+            GET STARTED
           </Link>
         )}
       </nav>
@@ -201,8 +206,9 @@ function Navbar() {
 function Footer() {
   return (
     <footer style={{
-      background:'linear-gradient(160deg,#082312,#0d3b1f)',
-      color:'rgba(255,255,255,.55)', padding:'64px 32px 36px', marginTop:'80px',
+      background: '#041108',
+      color: 'rgba(255,255,255,.3)', padding: '100px 32px 48px',
+      borderTop: '1px solid rgba(255,255,255,.05)'
     }}>
       <div style={{
         maxWidth:'1140px', margin:'0 auto',
@@ -266,9 +272,9 @@ export default function App() {
             <Navbar/>
             <PageWrapper lang={appLang}>
               <Routes>
-                <Route path="/"        element={<ProtectedRoute><Home/></ProtectedRoute>}/>
-                <Route path="/about"   element={<ProtectedRoute><About/></ProtectedRoute>}/>
-                <Route path="/contact" element={<ProtectedRoute><Contact/></ProtectedRoute>}/>
+                <Route path="/"        element={<Home/>}/>
+                <Route path="/about"   element={<About/>}/>
+                <Route path="/contact" element={<Contact/>}/>
                 <Route path="/advisor" element={<ProtectedRoute><Advisor onLangChange={setAppLang}/></ProtectedRoute>}/>
               </Routes>
             </PageWrapper>

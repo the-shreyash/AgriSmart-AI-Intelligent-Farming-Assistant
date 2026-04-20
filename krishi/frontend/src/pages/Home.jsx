@@ -3,6 +3,11 @@
 // ============================================================
 import { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
+import gsap from 'gsap'
+import { useGSAP } from '@gsap/react'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+
+gsap.registerPlugin(ScrollTrigger)
 
 /* ── Animated counter ────────────────────────────────────────── */
 function useCounter(target, duration = 1800) {
@@ -27,7 +32,7 @@ function useCounter(target, duration = 1800) {
 function StatCard({ icon, value, suffix, label }) {
   const n = useCounter(value)
   return (
-    <div style={{
+    <div className="stat-card" style={{
       background: 'rgba(255,255,255,.07)',
       border: '1px solid rgba(255,255,255,.13)',
       borderRadius: '18px',
@@ -56,10 +61,11 @@ function StatCard({ icon, value, suffix, label }) {
 }
 
 /* ── Feature card ────────────────────────────────────────────── */
-function FeatureCard({ icon, title, desc, delay }) {
+function FeatureCard({ icon, title, desc }) {
   const [hovered, setHovered] = useState(false)
   return (
     <div
+      className="feature-card"
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       style={{
@@ -70,7 +76,6 @@ function FeatureCard({ icon, title, desc, delay }) {
         border: `1px solid ${hovered ? 'rgba(46,168,79,.2)' : 'rgba(0,0,0,.05)'}`,
         transform: hovered ? 'translateY(-7px)' : 'translateY(0)',
         transition: 'all .28s ease',
-        animation: `slideUp .5s ease ${delay}s both`,
       }}
     >
       <div style={{
@@ -98,7 +103,7 @@ function FeatureCard({ icon, title, desc, delay }) {
 /* ── Step ────────────────────────────────────────────────────── */
 function Step({ num, icon, title, desc }) {
   return (
-    <div style={{ display: 'flex', gap: '20px', alignItems: 'flex-start' }}>
+    <div className="how-step" style={{ display: 'flex', gap: '20px', alignItems: 'flex-start' }}>
       <div style={{
         flexShrink: 0, width: '50px', height: '50px',
         background: 'linear-gradient(135deg,var(--green-bright),var(--green-mid))',
@@ -158,7 +163,7 @@ function CropTile({ emoji, name, hindi, price, trend }) {
 /* ── Testimonial ─────────────────────────────────────────────── */
 function Testimonial({ quote, name, location, crop }) {
   return (
-    <div style={{
+    <div className="testimonial-card" style={{
       background: '#fff',
       borderRadius: '20px',
       padding: '28px 26px',
@@ -192,8 +197,37 @@ function Testimonial({ quote, name, location, crop }) {
 
 /* ── HOME PAGE ───────────────────────────────────────────────── */
 export default function Home() {
+  const container = useRef(null)
+
+  useGSAP(() => {
+    gsap.fromTo('.stat-card',
+      { opacity: 0, y: 30 },
+      { opacity: 1, y: 0, duration: 0.6, stagger: 0.1, ease: 'power2.out', scrollTrigger: { trigger: '.stats-container', start: 'top 85%' } }
+    )
+
+    gsap.fromTo('.feature-card',
+      { opacity: 0, y: 50 },
+      { opacity: 1, y: 0, duration: 0.6, stagger: 0.1, ease: 'power2.out', scrollTrigger: { trigger: '.features-container', start: 'top 80%' } }
+    )
+
+    gsap.fromTo('.how-step',
+      { opacity: 0, x: -50 },
+      { opacity: 1, x: 0, duration: 0.6, stagger: 0.2, ease: 'power2.out', scrollTrigger: { trigger: '.steps-container', start: 'top 80%' } }
+    )
+
+    gsap.fromTo('.mandi-panel',
+      { opacity: 0, x: 50 },
+      { opacity: 1, x: 0, duration: 0.8, ease: 'power3.out', scrollTrigger: { trigger: '.steps-container', start: 'top 80%' } }
+    )
+
+    gsap.fromTo('.testimonial-card',
+      { opacity: 0, scale: 0.9 },
+      { opacity: 1, scale: 1, duration: 0.5, stagger: 0.15, ease: 'back.out(1.5)', scrollTrigger: { trigger: '.testimonials-container', start: 'top 85%' } }
+    )
+  }, { scope: container })
+
   return (
-    <>
+    <div ref={container}>
       {/* ════ HERO ════ */}
       <section style={{
         background: 'linear-gradient(145deg,#0a3d1f 0%,#1a6b35 55%,#0c4d28 100%)',
@@ -211,7 +245,7 @@ export default function Home() {
         }} />
 
         {/* Floating field emojis */}
-        {['🌾','🚜','💧','🌱','☀️','🐄'].map((e, i) => (
+        {['🌾', '🚜', '💧', '🌱', '☀️', '🐄'].map((e, i) => (
           <span key={i} style={{
             position: 'absolute',
             fontSize: `${20 + i * 7}px`,
@@ -306,16 +340,16 @@ export default function Home() {
         background: 'linear-gradient(135deg,var(--green-deep),var(--green-mid))',
         padding: '60px 28px',
       }}>
-        <div className="container">
+        <div className="container stats-container">
           <div style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit,minmax(180px,1fr))',
             gap: '20px',
           }}>
-            <StatCard icon="👨‍🌾" value={50000}  suffix="+" label="किसान लाभान्वित"      />
-            <StatCard icon="🌾"    value={18}     suffix="+"  label="फसल प्रकार"           />
-            <StatCard icon="🗺️"    value={28}     suffix=""   label="राज्यों में उपलब्ध"   />
-            <StatCard icon="📈"    value={94}     suffix="%"  label="सटीकता दर"             />
+            <StatCard icon="👨‍🌾" value={50000} suffix="+" label="किसान लाभान्वित" />
+            <StatCard icon="🌾" value={18} suffix="+" label="फसल प्रकार" />
+            <StatCard icon="🗺️" value={28} suffix="" label="राज्यों में उपलब्ध" />
+            <StatCard icon="📈" value={94} suffix="%" label="सटीकता दर" />
           </div>
         </div>
       </section>
@@ -333,18 +367,18 @@ export default function Home() {
             </p>
           </div>
 
-          <div style={{
+          <div className="features-container" style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fill,minmax(270px,1fr))',
             gap: '22px',
           }}>
             {[
-              { icon:'🤖', title:'AI फसल सुझाव',     desc:'Gemini AI आपकी मिट्टी, मौसम और पानी का विश्लेषण करके Top 3 फसलें सुझाता है।',          delay:0    },
-              { icon:'🌤️', title:'Live मौसम डेटा',   desc:'OpenWeatherMap से आपके क्षेत्र का वास्तविक तापमान, नमी और वर्षा का डेटा।',              delay:0.07 },
-              { icon:'📈', title:'मंडी भाव पूर्वानुमान', desc:'18 प्रमुख फसलों का MSP और बाज़ार भाव — ताकि आप सही समय पर बेचें।',                delay:0.14 },
-              { icon:'📅', title:'खेती कैलेंडर',      desc:'महीने-दर-महीने काम की सूची — बुवाई से कटाई तक पूरी योजना।',                            delay:0.21 },
-              { icon:'🏦', title:'बैंक लोन रिपोर्ट',  desc:'KCC और फसल ऋण के लिए प्रिंट-ready PDF रिपोर्ट — बैंक में सीधे दिखाएं।',               delay:0.28 },
-              { icon:'🇮🇳', title:'सरकारी योजनाएँ',   desc:'PM-KISAN, PMFBY, KCC और राज्य योजनाओं की जानकारी एक जगह।',                             delay:0.35 },
+              { icon: '🤖', title: 'AI फसल सुझाव', desc: 'Gemini AI आपकी मिट्टी, मौसम और पानी का विश्लेषण करके Top 3 फसलें सुझाता है।' },
+              { icon: '🌤️', title: 'Live मौसम डेटा', desc: 'OpenWeatherMap से आपके क्षेत्र का वास्तविक तापमान, नमी और वर्षा का डेटा।' },
+              { icon: '📈', title: 'मंडी भाव पूर्वानुमान', desc: '18 प्रमुख फसलों का MSP और बाज़ार भाव — ताकि आप सही समय पर बेचें।' },
+              { icon: '📅', title: 'खेती कैलेंडर', desc: 'महीने-दर-महीने काम की सूची — बुवाई से कटाई तक पूरी योजना।' },
+              { icon: '🏦', title: 'बैंक लोन रिपोर्ट', desc: 'KCC और फसल ऋण के लिए प्रिंट-ready PDF रिपोर्ट — बैंक में सीधे दिखाएं।' },
+              { icon: '🇮🇳', title: 'सरकारी योजनाएँ', desc: 'PM-KISAN, PMFBY, KCC और राज्य योजनाओं की जानकारी एक जगह।' },
             ].map(f => <FeatureCard key={f.title} {...f} />)}
           </div>
         </div>
@@ -358,7 +392,7 @@ export default function Home() {
             gridTemplateColumns: '1fr 1fr',
             gap: '60px', alignItems: 'center',
           }}
-            className="how-grid"
+            className="how-grid steps-container"
           >
             <div>
               <div className="section-label">✦ HOW IT WORKS</div>
@@ -368,14 +402,14 @@ export default function Home() {
               </p>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '28px' }}>
                 <Step num="1" icon="📍" title="स्थान और जमीन की जानकारी दें" desc="जिला, मिट्टी का प्रकार, खेत का आकार और मौसम चुनें।" />
-                <Step num="2" icon="🤖" title="AI विश्लेषण करता है"           desc="Gemini AI + Live weather डेटा से आपकी जमीन का पूरा विश्लेषण।" />
-                <Step num="3" icon="🌾" title="Top 3 फसलें मिलती हैं"        desc="मंडी भाव, उपज अनुमान और पूरा कैलेंडर के साथ।" />
-                <Step num="4" icon="📄" title="रिपोर्ट डाउनलोड करें"         desc="बैंक लोन के लिए PDF रिपोर्ट प्रिंट करें या शेयर करें।" />
+                <Step num="2" icon="🤖" title="AI विश्लेषण करता है" desc="Gemini AI + Live weather डेटा से आपकी जमीन का पूरा विश्लेषण।" />
+                <Step num="3" icon="🌾" title="Top 3 फसलें मिलती हैं" desc="मंडी भाव, उपज अनुमान और पूरा कैलेंडर के साथ।" />
+                <Step num="4" icon="📄" title="रिपोर्ट डाउनलोड करें" desc="बैंक लोन के लिए PDF रिपोर्ट प्रिंट करें या शेयर करें।" />
               </div>
             </div>
 
             {/* Mandi ticker panel */}
-            <div>
+            <div className="mandi-panel">
               <div style={{
                 background: 'var(--green-deep)',
                 borderRadius: '24px', padding: '28px',
@@ -392,11 +426,11 @@ export default function Home() {
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                   {[
-                    { emoji:'🌾', name:'Wheat / गेहूँ',      hindi:'₹2,100–2,400/qtl', price:'MSP ₹2,275', trend:'↑' },
-                    { emoji:'🌿', name:'Mustard / सरसों',    hindi:'₹5,200–5,650/qtl', price:'MSP ₹5,650', trend:'→' },
-                    { emoji:'🫘', name:'Chickpea / चना',     hindi:'₹5,100–5,500/qtl', price:'MSP ₹5,440', trend:'↑' },
-                    { emoji:'🌽', name:'Maize / मक्का',      hindi:'₹1,700–1,950/qtl', price:'MSP ₹2,090', trend:'→' },
-                    { emoji:'🌱', name:'Soybean / सोयाबीन', hindi:'₹4,300–4,800/qtl', price:'MSP ₹4,600', trend:'↓' },
+                    { emoji: '🌾', name: 'Wheat / गेहूँ', hindi: '₹2,100–2,400/qtl', price: 'MSP ₹2,275', trend: '↑' },
+                    { emoji: '🌿', name: 'Mustard / सरसों', hindi: '₹5,200–5,650/qtl', price: 'MSP ₹5,650', trend: '→' },
+                    { emoji: '🫘', name: 'Chickpea / चना', hindi: '₹5,100–5,500/qtl', price: 'MSP ₹5,440', trend: '↑' },
+                    { emoji: '🌽', name: 'Maize / मक्का', hindi: '₹1,700–1,950/qtl', price: 'MSP ₹2,090', trend: '→' },
+                    { emoji: '🌱', name: 'Soybean / सोयाबीन', hindi: '₹4,300–4,800/qtl', price: 'MSP ₹4,600', trend: '↓' },
                   ].map(c => (
                     <div key={c.name} style={{
                       background: 'rgba(255,255,255,.07)',
@@ -406,14 +440,16 @@ export default function Home() {
                     }}>
                       <span style={{ fontSize: '24px' }}>{c.emoji}</span>
                       <div style={{ flex: 1 }}>
-                        <div style={{ fontFamily:"'Syne',sans-serif", fontWeight:700, fontSize:'13px', color:'#fff' }}>{c.name}</div>
-                        <div style={{ fontSize:'11px', color:'rgba(255,255,255,.5)', marginTop:'1px' }}>{c.hindi}</div>
+                        <div style={{ fontFamily: "'Syne',sans-serif", fontWeight: 700, fontSize: '13px', color: '#fff' }}>{c.name}</div>
+                        <div style={{ fontSize: '11px', color: 'rgba(255,255,255,.5)', marginTop: '1px' }}>{c.hindi}</div>
                       </div>
-                      <div style={{ textAlign:'right' }}>
-                        <div style={{ fontSize:'12px', fontWeight:700, color:'var(--gold-light)' }}>{c.price}</div>
-                        <div style={{ fontSize:'11px', fontWeight:700,
-                          color: c.trend==='↑'?'#66bb6a':c.trend==='↓'?'#ef5350':'#ffa726' }}>
-                          {c.trend} {c.trend==='↑'?'Rising':c.trend==='↓'?'Falling':'Stable'}
+                      <div style={{ textAlign: 'right' }}>
+                        <div style={{ fontSize: '12px', fontWeight: 700, color: 'var(--gold-light)' }}>{c.price}</div>
+                        <div style={{
+                          fontSize: '11px', fontWeight: 700,
+                          color: c.trend === '↑' ? '#66bb6a' : c.trend === '↓' ? '#ef5350' : '#ffa726'
+                        }}>
+                          {c.trend} {c.trend === '↑' ? 'Rising' : c.trend === '↓' ? 'Falling' : 'Stable'}
                         </div>
                       </div>
                     </div>
@@ -435,15 +471,15 @@ export default function Home() {
             <div className="section-label">✦ FARMER STORIES</div>
             <h2 className="section-title">किसानों की आवाज़</h2>
           </div>
-          <div style={{
+          <div className="testimonials-container" style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fill,minmax(280px,1fr))',
             gap: '20px',
           }}>
             {[
-              { quote: 'किसान AI ने मुझे सरसों उगाने की सलाह दी — इस साल ₹58,000 प्रति एकड़ कमाई हुई। पहले इतना कभी नहीं हुआ था।', name: 'रामलाल यादव',   location: 'Varanasi, UP',   crop: 'सरसों' },
-              { quote: 'बैंक लोन के लिए रिपोर्ट जमा करनी थी। किसान AI की PDF रिपोर्ट से पहली बार में ही KCC मिल गया।',          name: 'सुनीता देवी',  location: 'Indore, MP',     crop: 'सोयाबीन' },
-              { quote: 'Hindi में सब कुछ समझ आया। मंडी भाव देख कर सही समय पर गेहूँ बेचा — 15% ज्यादा दाम मिला।',              name: 'Harpreet Singh', location: 'Amritsar, Punjab', crop: 'गेहूँ' },
+              { quote: 'किसान AI ने मुझे सरसों उगाने की सलाह दी — इस साल ₹58,000 प्रति एकड़ कमाई हुई। पहले इतना कभी नहीं हुआ था।', name: 'रामलाल यादव', location: 'Varanasi, UP', crop: 'सरसों' },
+              { quote: 'बैंक लोन के लिए रिपोर्ट जमा करनी थी। किसान AI की PDF रिपोर्ट से पहली बार में ही KCC मिल गया।', name: 'सुनीता देवी', location: 'Indore, MP', crop: 'सोयाबीन' },
+              { quote: 'Hindi में सब कुछ समझ आया। मंडी भाव देख कर सही समय पर गेहूँ बेचा — 15% ज्यादा दाम मिला।', name: 'Harpreet Singh', location: 'Amritsar, Punjab', crop: 'गेहूँ' },
             ].map(t => <Testimonial key={t.name} {...t} />)}
           </div>
         </div>
@@ -477,6 +513,6 @@ export default function Home() {
           </Link>
         </div>
       </section>
-    </>
+    </div>
   )
 }
