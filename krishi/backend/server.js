@@ -37,6 +37,7 @@ const allowedOrigins = [
   'http://localhost:4173',
   'https://kisan-ai-nalh.vercel.app',
   'https://kisan-ai-coral.vercel.app',
+  'https://agrismart-ai-intelligent-farming.onrender.com'
 ];
 // Add FRONTEND_URL from env if set
 if (process.env.FRONTEND_URL) {
