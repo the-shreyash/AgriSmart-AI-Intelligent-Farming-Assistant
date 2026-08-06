@@ -1,8 +1,5 @@
 // ============================================================
 //  src/routes/recommendRoutes.js
-
-import newRecommendRoutes from "./newRecommendRoutes.js";
-
 // ============================================================
 import express from 'express'
 import { recommend } from '../controllers/recommendController.js';
@@ -40,5 +37,4 @@ router.get('/weather', async (req, res) => {
     });
   }
 });
-
-export default newRecommendRoutes;
+export default router;

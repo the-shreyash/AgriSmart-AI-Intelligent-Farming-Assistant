@@ -3,9 +3,9 @@
 // ============================================================
 import { useState, useEffect } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
+import API_BASE from '../api.js'
 
-const API = 'https://kisan-ai-backend-uphj.onrender.com'
-const GOOGLE_CLIENT_ID = '1021316997601-a71f2dokn9f56u45e06fbdiqmvvh7f8i.apps.googleusercontent.com'  // Step 4 mein milega
+const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || '466695535367-3a0mdna6nah9af440b9j71qno5s1d5et.apps.googleusercontent.com'
 
 export default function Login() {
   const [tab, setTab]         = useState('login')  // 'login' | 'register'
@@ -14,22 +14,42 @@ export default function Login() {
   const [error, setError]     = useState('')
   const navigate              = useNavigate()
 
-  // Load Google Sign In script
+  // Load Google Sign In script resiliently
   useEffect(() => {
-    const script = document.createElement('script')
-    script.src   = 'https://accounts.google.com/gsi/client'
-    script.async = true
-    script.onload = () => {
-      window.google.accounts.id.initialize({
-        client_id: GOOGLE_CLIENT_ID,
-        callback:  handleGoogleResponse,
-      })
-      window.google.accounts.id.renderButton(
-        document.getElementById('google-btn'),
-        { theme:'outline', size:'large', width:'100%', text:'continue_with' }
-      )
+    const initializeGSI = () => {
+      const btnContainer = document.getElementById('google-btn');
+      if (!window.google?.accounts?.id || !btnContainer) return;
+      try {
+        window.google.accounts.id.initialize({
+          client_id: GOOGLE_CLIENT_ID,
+          callback:  handleGoogleResponse,
+        });
+        window.google.accounts.id.renderButton(
+          btnContainer,
+          { theme:'outline', size:'large', width:'100%', text:'continue_with' }
+        );
+      } catch (err) {
+        console.error('GSI initialization error:', err);
+      }
+    };
+
+    if (window.google?.accounts?.id) {
+      initializeGSI();
+      return;
     }
-    document.body.appendChild(script)
+
+    const existingScript = document.querySelector('script[src="https://accounts.google.com/gsi/client"]');
+    if (!existingScript) {
+      const script = document.createElement('script');
+      script.src   = 'https://accounts.google.com/gsi/client';
+      script.async = true;
+      script.defer = true;
+      script.onload = initializeGSI;
+      document.body.appendChild(script);
+    } else {
+      existingScript.addEventListener('load', initializeGSI);
+      return () => existingScript.removeEventListener('load', initializeGSI);
+    }
   }, [])
 
   // Already logged in check
@@ -40,7 +60,7 @@ export default function Login() {
   const handleGoogleResponse = async (response) => {
     setLoading(true); setError('')
     try {
-      const res  = await fetch(`${API}/api/auth/google`, {
+      const res  = await fetch(`${API_BASE}/api/auth/google`, {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
         body:    JSON.stringify({ credential: response.credential }),
@@ -61,7 +81,7 @@ export default function Login() {
     setLoading(true); setError('')
     const url = tab === 'login' ? '/api/auth/login' : '/api/auth/register'
     try {
-      const res  = await fetch(`${API}${url}`, {
+      const res  = await fetch(`${API_BASE}${url}`, {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
         body:    JSON.stringify(form),

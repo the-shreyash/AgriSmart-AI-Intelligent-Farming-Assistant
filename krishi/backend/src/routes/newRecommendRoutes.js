@@ -42,10 +42,8 @@ function optionalAuth(req, res, next) {
 router.post('/generate', optionalAuth, generate);
 
 // GET endpoints require user to be logged in
-router.use(authMiddleware);
-
-router.get('/latest',  getLatest);
-router.get('/history', getHistory);
-router.get('/:id',     getById);
+router.get('/latest',  authMiddleware, getLatest);
+router.get('/history', authMiddleware, getHistory);
+router.get('/:id',     authMiddleware, getById);
 
 export default router
