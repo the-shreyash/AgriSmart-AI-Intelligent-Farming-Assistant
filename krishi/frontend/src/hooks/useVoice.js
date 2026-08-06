@@ -9,6 +9,7 @@
 //  Web Speech English voice is NEVER used for Hindi text.
 // ============================================================
 import { useState, useRef, useCallback, useEffect } from 'react'
+import API_BASE from '../api.js'
 
 export const hasTTS = typeof window !== 'undefined'
 export const hasSTT = typeof window !== 'undefined' &&
@@ -84,7 +85,7 @@ async function speakViaBackend(text, lang, cancelRef, onChunk, onDone) {
 
     const chunk = chunks[idx]
     const gtLang = lang === 'hi' ? 'hi' : 'en'
-    const url = `/api/tts?text=${encodeURIComponent(chunk)}&lang=${gtLang}`
+    const url = `${API_BASE}/tts?text=${encodeURIComponent(chunk)}&lang=${gtLang}`
 
     try {
       const resp = await fetch(url)

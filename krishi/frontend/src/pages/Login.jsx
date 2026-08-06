@@ -60,7 +60,7 @@ export default function Login() {
   const handleGoogleResponse = async (response) => {
     setLoading(true); setError('')
     try {
-      const res  = await fetch(`${API_BASE}/api/auth/google`, {
+      const res  = await fetch(`${API_BASE}/auth/google`, {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
         body:    JSON.stringify({ credential: response.credential }),
@@ -79,7 +79,7 @@ export default function Login() {
 
   const handleSubmit = async () => {
     setLoading(true); setError('')
-    const url = tab === 'login' ? '/api/auth/login' : '/api/auth/register'
+    const url = tab === 'login' ? '/auth/login' : '/auth/register'
     try {
       const res  = await fetch(`${API_BASE}${url}`, {
         method:  'POST',

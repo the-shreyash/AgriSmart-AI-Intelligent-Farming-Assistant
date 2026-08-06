@@ -3,6 +3,7 @@
 //  Calls the Express backend at /api/recommend (proxied by Vite)
 // ============================================================
 import { useState } from 'react'
+import API_BASE from '../api.js'
 
 const SOIL_OPTIONS = [
   { value:'alluvial',     label:'जलोढ़ / Alluvial'         },
@@ -144,7 +145,7 @@ export default function Advisor() {
     }
     setError(''); setLoading(true); setData(null)
     try {
-      const res = await fetch('/api/recommend', {
+      const res = await fetch(`${API_BASE}/recommend`, {
         method:'POST',
         headers:{ 'Content-Type':'application/json' },
         body: JSON.stringify({ ...form, language: lang }),

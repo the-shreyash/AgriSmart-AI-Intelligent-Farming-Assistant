@@ -35,20 +35,36 @@ app.use(helmet({ contentSecurityPolicy: false }));
 const allowedOrigins = [
   'http://localhost:5173',
   'http://localhost:4173',
+  'http://localhost:3000',
   'https://kisan-ai-nalh.vercel.app',
   'https://kisan-ai-coral.vercel.app',
   'https://agrismart-ai-intelligent-farming.onrender.com'
 ];
-// Add FRONTEND_URL from env if set
+// Add FRONTEND_URL from env if set (stripping any trailing slash)
 if (process.env.FRONTEND_URL) {
-  allowedOrigins.push(process.env.FRONTEND_URL);
+  allowedOrigins.push(process.env.FRONTEND_URL.replace(/\/+$/, ''));
 }
 
-app.use(cors({
-  origin: allowedOrigins,
+const corsOptions = {
+  origin: (origin, callback) => {
+    // Allow requests with no origin (mobile apps, curl, server-to-server)
+    if (!origin) return callback(null, true);
+    const cleanOrigin = origin.replace(/\/+$/, '');
+    const isAllowed = allowedOrigins.some(o => o.replace(/\/+$/, '') === cleanOrigin);
+    if (isAllowed) {
+      callback(null, true);
+    } else {
+      console.warn(`[CORS Blocked] Origin not allowed: ${origin}`);
+      callback(new Error('Blocked by CORS policy: Origin not allowed'));
+    }
+  },
+  credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
-}));
+};
+
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions)); // Handle OPTIONS preflight for all routes
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

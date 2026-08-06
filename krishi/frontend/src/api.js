@@ -6,6 +6,8 @@
 //  Separate deploy: Set VITE_API_URL env var
 // ============================================================
 
-const API_BASE = import.meta.env.VITE_API_URL || '';
+// Normalize VITE_API_URL: strip any trailing slash, fallback to '/api' in local Vite dev mode
+const rawApiUrl = import.meta.env.VITE_API_URL || '/api';
+const API_BASE = rawApiUrl.replace(/\/+$/, '');
 
 export default API_BASE;
